@@ -1,144 +1,169 @@
 set PREVIEW_MODE "CitraDumper - Archive dumper for Citra\nby tgsm"
-set DUMPING_ALL "false"
 
-set CITRA_PATH $[GM9OUT]/citra/nand/00000000000000000000000000000000/title
-set CITRA_DATA_PATH $[GM9OUT]/citra/nand/data/00000000000000000000000000000000/sysdata
+set CITRA_PATH "$[GM9OUT]/citra/nand/00000000000000000000000000000000/title"
+set CITRA_DATA_PATH "$[GM9OUT]/citra/nand/data/00000000000000000000000000000000/sysdata"
 
 @start
 set PREVIEW_MODE "CitraDumper - Archive dumper for Citra\nby tgsm"
+set DUMPING_ALL "false"
 
 labelsel -o -s "Choose an option." menu_*
 goto start 
 
 @menu_Dump_System_Archives
 set PREVIEW_MODE "CitraDumper - Archive dumper for Citra\nby tgsm\n \nDumping system archives..."
-# mkdir -o -s $[CITRA_PATH]/000400db/00010302/content/
-mkdir -o -s $[CITRA_PATH]/0004009b/00010202/content/
-mkdir -o -s $[CITRA_PATH]/0004009b/00010402/content/
 
-# set NG_OUT_TMD $[CITRA_PATH]/000400db/00010302/content/00000003.tmd
-# set NG_OUT_APP $[CITRA_PATH]/000400db/00010302/content/0000000c.app
-set MII_OUT_TMD $[CITRA_PATH]/0004009b/00010202/content/00000000.tmd
-set MII_OUT_APP $[CITRA_PATH]/0004009b/00010202/content/00000000.app
-set REGION_OUT_TMD $[CITRA_PATH]/0004009b/00010402/content/00000002.tmd
-set REGION_OUT_APP $[CITRA_PATH]/0004009b/00010402/content/00000009.app
-set CLCERTA_OUT_TMD $[CITRA_PATH]/0004001b/00010002/content/00000000.tmd
-set CLCERTA_OUT_APP $[CITRA_PATH]/0004001b/00010002/content/00000000.app
+# There is no need to check for model or region here, since these values are the same across both.
+# set NG_TID_LOW "00010302"
+set MII_TID_LOW "00010202"
+# set REGION_TID_LOW "00010402"
+set CLCERTA_TID_LOW "00010002"
+
+# set NG_OUT_TMD "$[CITRA_PATH]/000400db/00010302/content/00000003.tmd"
+# set NG_OUT_APP "$[CITRA_PATH]/000400db/00010302/content/0000000c.app"
+set MII_OUT_TMD "$[CITRA_PATH]/0004009b/$[MII_TID_LOW]/content/00000000.tmd"
+set MII_OUT_APP "$[CITRA_PATH]/0004009b/$[MII_TID_LOW]/content/00000000.app"
+# set REGION_OUT_TMD "$[CITRA_PATH]/0004009b/$[REGION_TID_LOW]/content/00000002.tmd"
+# set REGION_OUT_APP "$[CITRA_PATH]/0004009b/$[REGION_TID_LOW]/content/00000009.app"
+set CLCERTA_OUT_TMD "$[CITRA_PATH]/0004001b/$[CLCERTA_TID_LOW]/content/00000000.tmd"
+set CLCERTA_OUT_APP "$[CITRA_PATH]/0004001b/$[CLCERTA_TID_LOW]/content/00000000.app"
 
 # Citra's HLE bad word list is better than the 3DS's, but keep the code here just in case.
 # set PREVIEW_MODE "CitraDumper - Archive dumper for Citra\nby tgsm\n \nDumping system archives...\n[NG bad word list]"
-# cp -w 1:/title/000400db/00010302/content/00000003.tmd $[NG_OUT_TMD]
-# cp -w 1:/title/000400db/00010302/content/0000000c.app $[NG_OUT_APP]
+# cp -w "1:/title/000400db/00010302/content/00000003.tmd" $[NG_OUT_TMD]
+# cp -w "1:/title/000400db/00010302/content/0000000c.app" $[NG_OUT_APP]
 
 set PREVIEW_MODE "CitraDumper - Archive dumper for Citra\nby tgsm\n \nDumping system archives...\n[Mii data]"
-cp -w 1:/title/0004009b/00010202/content/00000000.tmd $[MII_OUT_TMD]
-cp -w 1:/title/0004009b/00010202/content/00000000.app $[MII_OUT_APP]
+cp -w "1:/title/0004009b/$[MII_TID_LOW]/content/00000000.tmd" $[MII_OUT_TMD]
+cp -w "1:/title/0004009b/$[MII_TID_LOW]/content/00000000.app" $[MII_OUT_APP]
 
 # Citra's HLE region manifest is 100% identical to the 3DS's, but keep the code here just in case.
 # set PREVIEW_MODE "CitraDumper - Archive dumper for Citra\nby tgsm\n \nDumping system archives...\n[Region manifest]"
-# cp -w 1:/title/0004009b/00010402/content/00000002.tmd $[REGION_OUT_TMD]
-# cp -w 1:/title/0004009b/00010402/content/00000009.app $[REGION_OUT_APP]
+# cp -w "1:/title/0004009b/$[REGION_TID_LOW]/content/00000002.tmd" $[REGION_OUT_TMD]
+# cp -w "1:/title/0004009b/$[REGION_TID_LOW]/content/00000009.app" $[REGION_OUT_APP]
 
 set PREVIEW_MODE "CitraDumper - Archive dumper for Citra\nby tgsm\n \nDumping system archives...\n[ClCertA]"
-cp -w 1:/title/0004001b/00010002/content/00000000.tmd $[CLCERTA_OUT_TMD]
-cp -w 1:/title/0004001b/00010002/content/00000000.app $[CLCERTA_OUT_APP]
-
-echo "System archives dumped successfully"
+cp -w "1:/title/0004001b/$[CLCERTA_TID_LOW]/content/00000000.tmd" $[CLCERTA_OUT_TMD]
+cp -w "1:/title/0004001b/$[CLCERTA_TID_LOW]/content/00000000.app" $[CLCERTA_OUT_APP]
 
 if chk $[DUMPING_ALL] "true"
     goto menu_Dump_Applets
 else
+    echo "System archives dumped successfully"
     goto start
 end
 
 @menu_Dump_Applets
 set PREVIEW_MODE "CitraDumper - Archive dumper for Citra\nby tgsm\n \nDumping system applets..."
-mkdir -o -s $[CITRA_PATH]/00040030/0000c802/content/
-mkdir -o -s $[CITRA_PATH]/00040030/0000c502/content/
 
-set SWKBD_OUT_TMD $[CITRA_PATH]/00040030/0000c802/content/00000002.tmd
-set SWKBD_OUT_APP $[CITRA_PATH]/00040030/0000c802/content/0000000b.app
-set ERRDISP_OUT_TMD $[CITRA_PATH]/00040030/0000c502/content/00000002.tmd
-set ERRDISP_OUT_APP $[CITRA_PATH]/00040030/0000c502/content/0000001c.app
+if chk $[REGION] "USA"
+    set SWKBD_TID_LOW "0000c802"
+    set ERRDISP_TID_LOW "0000c502"
+elif chk $[REGION] "JPN"
+    set SWKBD_TID_LOW "0000c002"
+    set ERRDISP_TID_LOW "0000c502"
+elif chk $[REGION] "EUR"
+    set SWKBD_TID_LOW "0000d002"
+    set ERRDISP_TID_LOW "0000c502"
+elif chk $[REGION] "CHN"
+    set SWKBD_TID_LOW "0000d802"
+    set ERRDISP_TID_LOW "0000cf02"
+elif chk $[REGION] "KOR"
+    set SWKBD_TID_LOW "0000de02"
+    set ERRDISP_TID_LOW "0000cf02"
+elif chk $[REGION] "TWN"
+    set SWKBD_TID_LOW "0000e402"
+    set ERRDISP_TID_LOW "0000cf02"
+else
+    echo "Unknown region. Aborting..."
+    goto start
+end
+
+set SWKBD_OUT_TMD "$[CITRA_PATH]/00040030/$[SWKBD_TID_LOW]/content/00000002.tmd"
+set SWKBD_OUT_APP "$[CITRA_PATH]/00040030/$[SWKBD_TID_LOW]/content/0000000b.app"
+set ERRDISP_OUT_TMD "$[CITRA_PATH]/00040030/$[ERRDISP_TID_LOW]/content/00000002.tmd"
+set ERRDISP_OUT_APP "$[CITRA_PATH]/00040030/$[ERRDISP_TID_LOW]/content/0000001c.app"
 
 set PREVIEW_MODE "CitraDumper - Archive dumper for Citra\nby tgsm\n \nDumping system applets...\n[Software keyboard]"
-cp -w 1:/title/00040030/0000c802/content/00000002.tmd $[SWKBD_OUT_TMD]
-cp -w 1:/title/00040030/0000c802/content/0000000b.app $[SWKBD_OUT_APP]
+cp -w "1:/title/00040030/$[SWKBD_TID_LOW]/content/00000002.tmd" $[SWKBD_OUT_TMD]
+cp -w "1:/title/00040030/$[SWKBD_TID_LOW]/content/0000000b.app" $[SWKBD_OUT_APP]
 
 set PREVIEW_MODE "CitraDumper - Archive dumper for Citra\nby tgsm\n \nDumping system applets...\n[Error display]"
-cp -w 1:/title/00040030/0000c502/content/00000002.tmd $[ERRDISP_OUT_TMD]
-cp -w 1:/title/00040030/0000c502/content/0000001c.app $[ERRDISP_OUT_APP]
-
-echo "System applets dumped successfully"
+cp -w "1:/title/00040030/$[ERRDISP_TID_LOW]/content/00000002.tmd" $[ERRDISP_OUT_TMD]
+cp -w "1:/title/00040030/$[ERRDISP_TID_LOW]/content/0000001c.app" $[ERRDISP_OUT_APP]
 
 if chk $[DUMPING_ALL] "true"
     goto menu_Dump_Shared_Fonts
 else
+    echo "System applets dumped successfully"
     goto start
 end
 
 @menu_Dump_Shared_Fonts
 set PREVIEW_MODE "CitraDumper - Archive dumper for Citra\nby tgsm\n \nDumping shared fonts..."
-mkdir -o -s $[CITRA_PATH]/0004009b/00014002/content/
-mkdir -o -s $[CITRA_PATH]/0004009b/00014102/content/
-mkdir -o -s $[CITRA_PATH]/0004009b/00014202/content/
-mkdir -o -s $[CITRA_PATH]/0004009b/00014302/content/
 
-set USA_OUT_TMD $[CITRA_PATH]/0004009b/00014002/content/00000000.tmd
-set USA_OUT_APP $[CITRA_PATH]/0004009b/00014002/content/00000000.app
-set CHN_OUT_TMD $[CITRA_PATH]/0004009b/00014102/content/00000000.tmd
-set CHN_OUT_APP $[CITRA_PATH]/0004009b/00014102/content/00000001.app
-set KOR_OUT_TMD $[CITRA_PATH]/0004009b/00014202/content/00000000.tmd
-set KOR_OUT_APP $[CITRA_PATH]/0004009b/00014202/content/00000001.app
-set TWN_OUT_TMD $[CITRA_PATH]/0004009b/00014302/content/00000000.tmd
-set TWN_OUT_APP $[CITRA_PATH]/0004009b/00014302/content/00000001.app
+# There is no need to check for model or region here, since these values are the same across both.
+set USA_TID_LOW "00014002"
+set CHN_TID_LOW "00014102"
+set KOR_TID_LOW "00014202"
+set TWN_TID_LOW "00014302"
+
+set USA_OUT_TMD "$[CITRA_PATH]/0004009b/$[USA_TID_LOW]/content/00000000.tmd"
+set USA_OUT_APP "$[CITRA_PATH]/0004009b/$[USA_TID_LOW]/content/00000000.app"
+set CHN_OUT_TMD "$[CITRA_PATH]/0004009b/$[CHN_TID_LOW]/content/00000000.tmd"
+set CHN_OUT_APP "$[CITRA_PATH]/0004009b/$[CHN_TID_LOW]/content/00000001.app"
+set KOR_OUT_TMD "$[CITRA_PATH]/0004009b/$[KOR_TID_LOW]/content/00000000.tmd"
+set KOR_OUT_APP "$[CITRA_PATH]/0004009b/$[KOR_TID_LOW]/content/00000001.app"
+set TWN_OUT_TMD "$[CITRA_PATH]/0004009b/$[TWN_TID_LOW]/content/00000000.tmd"
+set TWN_OUT_APP "$[CITRA_PATH]/0004009b/$[TWN_TID_LOW]/content/00000001.app"
 
 set PREVIEW_MODE "CitraDumper - Archive dumper for Citra\nby tgsm\n \nDumping shared fonts...\n[JPN / EUR / USA]"
-cp -w 1:/title/0004009b/00014002/content/00000000.tmd $[USA_OUT_TMD]
-cp -w 1:/title/0004009b/00014002/content/00000000.app $[USA_OUT_APP]
+cp -w "1:/title/0004009b/$[USA_TID_LOW]/content/00000000.tmd" $[USA_OUT_TMD]
+cp -w "1:/title/0004009b/$[USA_TID_LOW]/content/00000000.app" $[USA_OUT_APP]
 set PREVIEW_MODE "CitraDumper - Archive dumper for Citra\nby tgsm\n \nDumping shared fonts...\n[CHN]"
-cp -w 1:/title/0004009b/00014102/content/00000000.tmd $[CHN_OUT_TMD]
-cp -w 1:/title/0004009b/00014102/content/00000001.app $[CHN_OUT_APP]
+cp -w "1:/title/0004009b/$[CHN_TID_LOW]/content/00000000.tmd" $[CHN_OUT_TMD]
+cp -w "1:/title/0004009b/$[CHN_TID_LOW]/content/00000001.app" $[CHN_OUT_APP]
 set PREVIEW_MODE "CitraDumper - Archive dumper for Citra\nby tgsm\n \nDumping shared fonts...\n[KOR]"
-cp -w 1:/title/0004009b/00014202/content/00000000.tmd $[KOR_OUT_TMD]
-cp -w 1:/title/0004009b/00014202/content/00000001.app $[KOR_OUT_APP]
+cp -w "1:/title/0004009b/$[KOR_TID_LOW]/content/00000000.tmd" $[KOR_OUT_TMD]
+cp -w "1:/title/0004009b/$[KOR_TID_LOW]/content/00000001.app" $[KOR_OUT_APP]
 set PREVIEW_MODE "CitraDumper - Archive dumper for Citra\nby tgsm\n \nDumping shared fonts...\n[TWN]"
-cp -w 1:/title/0004009b/00014302/content/00000000.tmd $[TWN_OUT_TMD]
-cp -w 1:/title/0004009b/00014302/content/00000001.app $[TWN_OUT_APP]
-
-echo "Shared fonts dumped successfully"
+cp -w "1:/title/0004009b/$[TWN_TID_LOW]/content/00000000.tmd" $[TWN_OUT_TMD]
+cp -w "1:/title/0004009b/$[TWN_TID_LOW]/content/00000001.app" $[TWN_OUT_APP]
 
 if chk $[DUMPING_ALL] "true"
     goto menu_Dump_Config
 else
+    echo "Shared fonts dumped successfully"
     goto start
 end
 
 @menu_Dump_Config
 set PREVIEW_MODE "CitraDumper - Archive dumper for Citra\nby tgsm\n \nDumping config savegame..."
 
-mkdir -o -s $[CITRA_DATA_PATH]/00010017/00000000/
-set CONFIG_OUT $[CITRA_DATA_PATH]/00010017/00000000/config
+set CONFIG_OUT "$[CITRA_DATA_PATH]/00010017/00000000/config"
 
+mkdir -o -s "$[CITRA_DATA_PATH]/00010017/00000000/"
 inject 1:/data/$[SYSID0]/sysdata/00010017/00000000@6000:8000 $[CONFIG_OUT]@0
-
-echo "Config dumped successfully"
 
 if chk $[DUMPING_ALL] "true"
     goto menu_Dump_ARM9_bootrom
 else
+    echo "Config dumped successfully"
     goto start
 end
 
 @menu_Dump_ARM9_bootrom
 set PREVIEW_MODE "CitraDumper - Archive dumper for Citra\nby tgsm\n \nDumping ARM9 bootrom..."
 
-set CITRA_SYSDATA_PATH $[GM9OUT]/citra/sysdata/
-mkdir -o -s $[CITRA_SYSDATA_PATH]
+set CITRA_SYSDATA_PATH "$[GM9OUT]/citra/sysdata/"
 
-inject M:/boot9.bin $[CITRA_SYSDATA_PATH]/boot9.bin@0
+cp -w "M:/boot9.bin" "$[CITRA_SYSDATA_PATH]/boot9.bin"
 
-echo "ARM9 bootrom dumped successfully"
+if chk $[DUMPING_ALL] "true"
+    echo "Everything dumped successfully"
+else
+    echo "ARM9 bootrom dumped successfully"
+end
 
 goto start
 
