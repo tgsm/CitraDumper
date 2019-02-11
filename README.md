@@ -9,7 +9,14 @@ CitraDumper is a script for [GodMode9](https://github.com/d0k3/GodMode9) that le
 * Select `CitraDumper`
 
 # Usage
-You are able to dump your system archives, shared fonts, system applets, system config and your ARM9 bootrom. It is recommended you dump all of these, however you are able to dump the file sets individually if you only need a certain set.
+You are able to dump the following with this script:
+* System archives (Mii data, ClCertA)
+* Shared fonts
+* System applets
+* System config
+* ARM9 bootrom
+
+It is recommended you dump all of these, however you are able to dump the file sets individually if you only need a certain set.
 
 # Finishing up
 Once you have dumped all of the files necessary:
